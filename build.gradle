@@ -7,16 +7,13 @@ plugins {
 group = 'by.clever'
 version = '1.0-SNAPSHOT'
 
-war {
-    webAppDirectory = file('src/main/webapp')
-    webInf { from 'src/additionalWebInf' }
-    webXml = file('src/main/webapp/WEB-INF/web.xml')
-}
-
-
 java {
     sourceCompatibility = JavaLanguageVersion.of(17)
     targetCompatibility = JavaLanguageVersion.of(17)
+}
+
+compileJava {
+    options.compilerArgs << '-parameters'
 }
 
 repositories {
@@ -30,7 +27,6 @@ ext {
 
 dependencies {
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
-
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testImplementation("org.junit.jupiter:junit-jupiter-params:${junitVersion}")
@@ -51,9 +47,13 @@ dependencies {
     implementation 'org.springframework:spring-webmvc:6.1.2'
     implementation 'org.springframework:spring-aop:6.1.2'
     implementation 'org.springframework:spring-aspects:6.1.2'
+    implementation 'org.springframework:spring-jdbc:6.1.2'
+    implementation 'org.springframework:spring-orm:6.1.2'
     implementation 'org.hibernate:hibernate-c3p0:6.4.1.Final'
     implementation 'org.hibernate:hibernate-core:6.4.1.Final'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
 }
 
 test {
