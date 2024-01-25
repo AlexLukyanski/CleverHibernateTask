@@ -13,33 +13,30 @@ import java.util.List;
 public class HouseRequestTestData {
 
     @Builder.Default
-    BigDecimal area = BigDecimal.valueOf(35);
+    private BigDecimal area = BigDecimal.valueOf(35);
 
     @Builder.Default
-    String country = "Belarus";
+    private String country = "Belarus";
 
     @Builder.Default
-    String city = "Mogilev";
+    private String city = "Mogilev";
 
     @Builder.Default
-    String street = "TheOneAndOnly";
+    private String street = "TheOneAndOnly";
 
     @Builder.Default
-    int number = 3;
+    private int number = 3;
 
     @Builder.Default
-    LocalDateTime createDate = LocalDateTime.MIN;
+    private LocalDateTime createDate = LocalDateTime.MIN;
 
     @Builder.Default
-    Person owner = new Person();
+    private List<Person> residents = new ArrayList<>();
 
     @Builder.Default
-    List<Person> residents = new ArrayList<>();
-
-    @Builder.Default
-    List<Person> owners = new ArrayList<>();
+    private List<Person> owners = new ArrayList<>();
 
     public HouseRequest getHouseRequest() {
-        return new HouseRequest(area, country, city, street, number, createDate, owner, residents, owners);
+        return new HouseRequest(area, country, city, street, number, createDate, residents, owners);
     }
 }
