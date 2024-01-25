@@ -31,8 +31,8 @@ public class PersonController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonResponse findPersonByID(@PathVariable("id") UUID uuid) {
-        PersonResponse personResponse = personService.getById(uuid);
+    public PersonResponse findPersonByID(@PathVariable UUID id) {
+        PersonResponse personResponse = personService.getById(id);
         return personResponse;
     }
 
@@ -53,7 +53,7 @@ public class PersonController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UUID update(@RequestBody @Valid PersonRequest personRequest, @PathVariable("id") UUID uuid) {
+    public UUID update(@RequestBody @Valid PersonRequest personRequest, @PathVariable UUID id) {
         UUID uuidResponse = personService.update(personRequest);
         return uuidResponse;
     }
@@ -66,10 +66,9 @@ public class PersonController {
 
     @GetMapping("/owned/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<HouseResponse> getOwnedHouses(@PathVariable("id") UUID uuid) {
+    public List<HouseResponse> getOwnedHouses(@PathVariable UUID id) {
 
-
-        List<HouseResponse> ownedHousesResponse = personService.getOwnedHouses(uuid);
+        List<HouseResponse> ownedHousesResponse = personService.getOwnedHouses(id);
         return ownedHousesResponse;
     }
 }

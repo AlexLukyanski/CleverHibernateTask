@@ -1,5 +1,13 @@
-db:
-    driver: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/HibernateTaskDB?useSSL=false
-    user: postgres
-    password: qwerty
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/HibernateTaskDB?useSSL=false
+        driver: org.postgresql.Driver
+        username: ${username.value:postgres}
+        password: qwerty
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+        show-sql: true

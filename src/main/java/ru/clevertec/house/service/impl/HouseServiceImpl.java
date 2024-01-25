@@ -11,9 +11,11 @@ import ru.clevertec.house.entity.House;
 import ru.clevertec.house.exception.NotFoundException;
 import ru.clevertec.house.mapper.HouseMapper;
 import ru.clevertec.house.mapper.PersonMapper;
+import ru.clevertec.house.service.Cache;
 import ru.clevertec.house.service.HouseService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,20 +25,29 @@ public class HouseServiceImpl implements HouseService {
     private final HouseDAO houseDAO;
     private final HouseMapper houseMapper;
     private final PersonMapper personMapper;
+    private final Cache<UUID, House> cacheHouse;
 
     @Override
     @Transactional
     public UUID save(HouseRequest houseRequest) {
         House house = houseMapper.fromRequestToHouse(houseRequest);
         UUID uuid = houseDAO.save(house);
+        cacheHouse.put(uuid, house);
         return uuid;
     }
 
     @Override
     @Transactional
     public HouseResponse getById(UUID uuid) {
-        House house = houseDAO.getById(uuid)
-                .orElseThrow(() -> NotFoundException.of(House.class, uuid));
+
+        Optional<House> optionalHouse = cacheHouse.get(uuid);
+        House house;
+        if (optionalHouse.isEmpty()) {
+            house = houseDAO.getById(uuid)
+                    .orElseThrow(() -> NotFoundException.of(House.class, uuid));
+        } else {
+            house = optionalHouse.orElseThrow();
+        }
         HouseResponse houseResponse = houseMapper.fromHouseToResponse(house);
         return houseResponse;
     }
@@ -55,6 +66,7 @@ public class HouseServiceImpl implements HouseService {
     public UUID update(HouseRequest houseRequest) {
         House house = houseMapper.fromRequestToHouse(houseRequest);
         UUID uuid = houseDAO.update(house);
+        cacheHouse.put(uuid, house);
         return uuid;
     }
 
@@ -62,6 +74,7 @@ public class HouseServiceImpl implements HouseService {
     @Transactional
     public void delete(UUID uuid) {
         houseDAO.delete(uuid);
+        cacheHouse.remove(uuid);
     }
 
     @Override

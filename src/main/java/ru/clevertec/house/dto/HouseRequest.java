@@ -29,7 +29,6 @@ public record HouseRequest(
         @NotEmpty (message = "Cannot be empty")
         LocalDateTime createDate,
 
-        Person owner,
         List<Person> residents,
         List<Person> owners
 ) {
