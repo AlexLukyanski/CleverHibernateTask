@@ -1,4 +1,4 @@
-package ru.clevertec.house.service;
+package ru.clevertec.house;
 
 import org.springframework.boot.test.context.TestConfiguration;
 
