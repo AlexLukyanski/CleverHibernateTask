@@ -11,9 +11,11 @@ import ru.clevertec.house.entity.Person;
 import ru.clevertec.house.exception.NotFoundException;
 import ru.clevertec.house.mapper.HouseMapper;
 import ru.clevertec.house.mapper.PersonMapper;
+import ru.clevertec.house.service.Cache;
 import ru.clevertec.house.service.PersonService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,6 +25,7 @@ public class PersonServiceImpl implements PersonService {
     private final PersonDAO personDAO;
     private final PersonMapper personMapper;
     private final HouseMapper houseMapper;
+    private final Cache<UUID, Person> cachePerson;
 
     @Override
     @Transactional
@@ -30,6 +33,7 @@ public class PersonServiceImpl implements PersonService {
 
         Person person = personMapper.fromRequestToPerson(personRequest);
         UUID uuid = personDAO.save(person);
+        cachePerson.put(uuid, person);
         return uuid;
     }
 
@@ -37,8 +41,14 @@ public class PersonServiceImpl implements PersonService {
     @Transactional
     public PersonResponse getById(UUID uuid) {
 
-        Person person = personDAO.getById(uuid)
-                .orElseThrow(() -> NotFoundException.of(Person.class, uuid));
+        Optional<Person> optionalPerson = cachePerson.get(uuid);
+        Person person;
+        if (optionalPerson.isEmpty()) {
+            person = personDAO.getById(uuid)
+                    .orElseThrow(() -> NotFoundException.of(Person.class, uuid));
+        } else {
+            person = optionalPerson.orElseThrow();
+        }
         PersonResponse personResponse = personMapper.fromPersonToResponse(person);
         return personResponse;
     }
@@ -57,8 +67,10 @@ public class PersonServiceImpl implements PersonService {
     @Override
     @Transactional
     public UUID update(PersonRequest personRequest) {
+
         Person person = personMapper.fromRequestToPerson(personRequest);
         UUID uuid = personDAO.update(person);
+        cachePerson.put(uuid, person);
         return uuid;
     }
 
@@ -66,6 +78,7 @@ public class PersonServiceImpl implements PersonService {
     @Transactional
     public void delete(UUID uuid) {
         personDAO.delete(uuid);
+        cachePerson.remove(uuid);
     }
 
     @Override

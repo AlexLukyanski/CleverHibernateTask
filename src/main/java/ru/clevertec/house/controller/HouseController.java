@@ -59,7 +59,7 @@ public class HouseController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void dekete(@PathVariable("id") UUID uuid) {
+    public void delete(@PathVariable("id") UUID uuid) {
         houseService.delete(uuid);
     }
 
