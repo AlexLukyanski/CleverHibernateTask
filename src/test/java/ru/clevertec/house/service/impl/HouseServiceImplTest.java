@@ -16,6 +16,7 @@ import ru.clevertec.house.entity.Person;
 import ru.clevertec.house.exception.NotFoundException;
 import ru.clevertec.house.mapper.HouseMapper;
 import ru.clevertec.house.mapper.PersonMapper;
+import ru.clevertec.house.service.Cache;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,9 @@ class HouseServiceImplTest {
 
     @Mock
     private HouseDAO houseDAO;
+
+    @Mock
+    private Cache cache;
 
     @InjectMocks
     private HouseServiceImpl houseService;

@@ -1,17 +1,21 @@
-CREATE DATABASE "HibernateTaskDB"
-    WITH
-    OWNER = postgres
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'English_United States.1252'
-    LC_CTYPE = 'English_United States.1252'
-    TABLESPACE = pg_default
-    CONNECTION LIMIT = -1
-    IS_TEMPLATE = False;
-	
-	
-	
-	CREATE TABLE public."Person"
-(
+
+    CREATE TABLE IF NOT EXISTS public."House"
+    (
+        id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+        uuid character varying COLLATE pg_catalog."default" NOT NULL DEFAULT gen_random_uuid(),
+        area numeric NOT NULL,
+        country character varying COLLATE pg_catalog."default" NOT NULL,
+        city character varying COLLATE pg_catalog."default" NOT NULL,
+        street character varying COLLATE pg_catalog."default" NOT NULL,
+        "number" character varying COLLATE pg_catalog."default" NOT NULL,
+        create_date timestamp without time zone NOT NULL,
+        CONSTRAINT "House_pkey" PRIMARY KEY (id),
+        CONSTRAINT uuid_unique UNIQUE (uuid)
+    )
+
+
+	CREATE TABLE IF NOT EXISTS public."Person"
+    (
     id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     uuid character varying NOT NULL DEFAULT gen_random_uuid(),
     name character varying NOT NULL,
@@ -32,13 +36,6 @@ CREATE DATABASE "HibernateTaskDB"
         NOT VALID
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Person"
-    OWNER to postgres;
-	
-	
-	
 	
 CREATE TABLE IF NOT EXISTS public.m2m_house_person
 (

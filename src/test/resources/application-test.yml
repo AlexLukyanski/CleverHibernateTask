@@ -1,0 +1,10 @@
+spring:
+    datasource:
+        username: test
+        password: test
+    liquibase:
+        enabled: true
+    jpa:
+        properties.hibernate:
+            hbm2ddl.auto: none
+#            current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext

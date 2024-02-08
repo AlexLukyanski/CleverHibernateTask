@@ -53,7 +53,7 @@ public class PersonDAOImpl implements PersonDAO {
     public List<Person> getAll(int pageNumber, int pageSize) {
 
         Session session = sessionFactory.getCurrentSession();
-        Query<Person> query = session.createQuery("from Person", Person.class);
+        Query<Person> query = session.createQuery("from \"Person\"", Person.class);
         List<Person> persons = query.getResultList().stream()
                 .skip(pageSize * pageNumber - pageSize)
                 .limit(pageSize * pageNumber + pageSize)
